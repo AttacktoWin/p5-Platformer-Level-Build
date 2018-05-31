@@ -249,6 +249,14 @@ function init() {
                     } else if (this.state == "playing") {
                         player = undefined;
                         this.state = "build";
+                        for (var i = 0; i < this.level.platforms.length; i++) {
+                            this.level.platforms[i].x = this.level.platforms[i].homeX;
+                            this.level.platforms[i].y = this.level.platforms[i].homeY;
+                        }
+                        for (var i = 0; i < this.level.spikes.length; i++) {
+                            this.level.spikes[i].x = this.level.spikes[i].homeX;
+                            this.level.spikes[i].y = this.level.spikes[i].homeY;
+                        }
                     }
                 }
             }
@@ -381,7 +389,7 @@ class Player {
         }
 
         if (this.x > width) {
-            game.state = "build";
+            game.changeMode();
         }
     }
 

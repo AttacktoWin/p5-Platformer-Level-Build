@@ -43,6 +43,9 @@ function mousePressed() {
                 game.level.select();
             }
         }
+        if(game.state == "build") {
+            game.level.select();
+        }
         if (mouseX > 600 && mouseX < 720) {
             if (mouseY > 50 && mouseY < 90) {
                 game.level.spikes.push(new Spike(600, 50, 3, 1, 0, 0, 0, 0));
@@ -53,9 +56,6 @@ function mousePressed() {
 }
 
 function mouseClicked() {
-    if(game.state == "build") {
-        game.level.select();
-    }
     game.changeMode();
 }
 
