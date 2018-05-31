@@ -381,7 +381,7 @@ class Player {
         }
 
         if (this.x > width) {
-            game.levelComplete();
+            game.state = "build";
         }
     }
 
