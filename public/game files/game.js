@@ -4,6 +4,7 @@ function init() {
         state: "build",
         menu: false,
         level: new Level(),
+        userLevels: [],
         timer: 0,
         seconds: 0,
         minutes: 0,
@@ -351,7 +352,7 @@ class Player {
         for (var i = 0; i < game.level.spikes.length; i++) {
             if (game.level.spikes[i].r == 1) {
                 if (this.x + this.w > game.level.spikes[i].x && this.x < game.level.spikes[i].x + game.level.spikes[i].w * 40) {
-                    if (this.y + this.h > game.level.spikes[i].y - 41 && this.y < game.level.spikes[i].y) {
+                    if (this.y + this.h > game.level.spikes[i].y && this.y < game.level.spikes[i].y + 40) {
                         this.deaths++;
                         game.seconds = parseInt(game.seconds);
                         game.seconds += 10;
@@ -390,6 +391,9 @@ class Player {
 
         if (this.x > width) {
             game.changeMode();
+        }
+        if (this.x < 0) {
+            this.x = 0;
         }
     }
 

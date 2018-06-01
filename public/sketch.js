@@ -1,5 +1,7 @@
 "use strict";
 
+let socket = io();
+
 let game, player;
 let debug = false;
 
@@ -14,6 +16,10 @@ function setup() {
     createCanvas(1920, 1080);
 
     init();
+
+    socket.on('sendLevels', function(levelsArray) {
+        game.userLevels = levelsArray;
+    });
 
     $("body").append("<div id='instructions'></div>");
 }
