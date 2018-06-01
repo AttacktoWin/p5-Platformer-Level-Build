@@ -1,7 +1,7 @@
 function init() {
     game = {
         pause: false,
-        state: "build",
+        state: "title",
         menu: false,
         level: new Level(),
         userLevels: [],
@@ -41,6 +41,27 @@ function init() {
                 this.timer = "0" + this.timer;
             }
         },
+        title: function () {
+            $("#instructions").hide();
+            fill(255);
+            noStroke();
+            textSize(62);
+            textAlign(CENTER);
+            text("GOOD LUCK", width / 2, height / 4);
+            fill(GREY);
+            rect(0, height - 50, width, 50);
+            fill(ORANGE);
+            rect(0, height - 54, width, 4);
+            fill(BLUE);
+            rect(width / 2 - 15, height - 81, 30, 30);
+            fill(RED);
+            rect(480, 540, 400, 150);
+            fill(BLUE);
+            rect(1040, 540, 400, 150);
+            fill(255);
+            text("PLAY", 680, 635);
+            text("BUILD", 1240, 635);
+        },
         show: function () {
             for (var i = 0; i < this.level.platforms.length; i++) {
                 this.level.platforms[i].show();
@@ -58,6 +79,9 @@ function init() {
             }
             rect(width - (30 * 4), 30 * 0.5, 30 * 1.5, 30 * 1.5);
             rect(width - 30 * 2, 30 * 0.5, 30 * 1.5, 30 * 1.5);
+            if (!this.menu) {
+                rect(30, 15, 30 * 1.5, 30 * 1.5);
+            }
             noFill();
             stroke(255, 255, 255, 150);
             strokeWeight(3);
@@ -67,6 +91,9 @@ function init() {
                 line(width - 30 * 1.75, 30 * 0.9, width - 30 * 0.8, 30 * 0.9);
                 line(width - 30 * 1.75, 30 * 1.2, width - 30 * 0.8, 30 * 1.2);
                 line(width - 30 * 1.75, 30 * 1.5, width - 30 * 0.8, 30 * 1.5);
+                line(40, 37.5, 65, 37.5);
+                line(40, 37.5, 55, 27.5);
+                line(40, 37.5, 55, 47.5)
             } else {
                 line(width - 30 * 1.75, 30 * 0.9, width - 30 * 0.8, 30 * 1.5);
                 line(width - 30 * 1.75, 30 * 1.5, width - 30 * 0.8, 30 * 0.9);
@@ -94,7 +121,7 @@ function init() {
                     } else if (this.level.selected.type == "spikes") {
                         if (keyIsDown(RIGHT_ARROW)) {
                             this.level.spikes[this.level.selected.index].r = 2;
-                        } else if (this.level.spikes[this.level.selected.index].r == 1 ||this.level.spikes[this.level.selected.index].r == 3) {
+                        } else if (this.level.spikes[this.level.selected.index].r == 1 || this.level.spikes[this.level.selected.index].r == 3) {
                             this.level.spikes[this.level.selected.index].w++;
                         }
                     }
@@ -105,7 +132,7 @@ function init() {
                     } else if (this.level.selected.type == "spikes") {
                         if (keyIsDown(LEFT_ARROW)) {
                             this.level.spikes[this.level.selected.index].r = 4;
-                        } else if (this.level.spikes[this.level.selected.index].r == 1 ||this.level.spikes[this.level.selected.index].r == 3) {
+                        } else if (this.level.spikes[this.level.selected.index].r == 1 || this.level.spikes[this.level.selected.index].r == 3) {
                             this.level.spikes[this.level.selected.index].w--;
                         }
                     }
@@ -116,7 +143,7 @@ function init() {
                     } else if (this.level.selected.type == "spikes") {
                         if (keyIsDown(UP_ARROW)) {
                             this.level.spikes[this.level.selected.index].r = 1;
-                        } else if (this.level.spikes[this.level.selected.index].r == 2 ||this.level.spikes[this.level.selected.index].r == 4) {
+                        } else if (this.level.spikes[this.level.selected.index].r == 2 || this.level.spikes[this.level.selected.index].r == 4) {
                             this.level.spikes[this.level.selected.index].w--;
                         }
                     }
@@ -127,7 +154,7 @@ function init() {
                     } else if (this.level.selected.type == "spikes") {
                         if (keyIsDown(DOWN_ARROW)) {
                             this.level.spikes[this.level.selected.index].r = 3;
-                        } else if (this.level.spikes[this.level.selected.index].r == 2 ||this.level.spikes[this.level.selected.index].r == 4) {
+                        } else if (this.level.spikes[this.level.selected.index].r == 2 || this.level.spikes[this.level.selected.index].r == 4) {
                             this.level.spikes[this.level.selected.index].w++;
                         }
                     }
@@ -242,6 +269,22 @@ function init() {
             player.show();
         },
         changeMode() {
+            if (mouseX > 480 && mouseX < 880) {
+                if (mouseY > 540 && mouseY < 690) {
+                    if (this.state == "title") {
+                        // socket.emit('requestLevels');
+                        this.state = "displayLevels";
+                    }
+                }
+            }
+            if (mouseX > 1040 && mouseX < 1440) {
+                if (mouseY > 540 && mouseY < 690) {
+                    if (this.state == "title") {
+                        this.state = "build";
+                        $("#instructions").show();
+                    }
+                }
+            }
             if (mouseX > width - 120 && mouseX < width - 75) {
                 if (mouseY > 15 && mouseY < 60) {
                     if (this.state == "build") {
@@ -267,6 +310,13 @@ function init() {
                         this.menu = false;
                     } else {
                         this.menu = true;
+                    }
+                }
+            }
+            if (mouseX > 30 && mouseX < 75) {
+                if (mouseY > 15 && mouseY < 60) {
+                    if (this.state == "build" && !this.menu) {
+                        this.state = "title";
                     }
                 }
             }
