@@ -37,6 +37,8 @@ function draw() {
         $("#instructions").hide();
     } else if (game.state == "title") {
         game.title();
+    } else if (game.state == "displayLevels") {
+        game.displayLevels();
     }
     if (debug) {
         console.log(mouseX + "," + mouseY);

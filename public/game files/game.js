@@ -5,6 +5,7 @@ function init() {
         menu: false,
         level: new Level(),
         userLevels: [],
+        page: 0,
         timer: 0,
         seconds: 0,
         minutes: 0,
@@ -61,6 +62,20 @@ function init() {
             fill(255);
             text("PLAY", 680, 635);
             text("BUILD", 1240, 635);
+        },
+        displayLevels: function() {
+            for (var i = 0; i < 25; i++) {
+                for (var x = 250; x < width - 250; x += 285) {
+                    noFill();
+                    stroke(ORANGE);
+                    strokeWeight(7);
+                    rect(x, (round(i/5) * 212.5) + 50, 150, 150);
+                    stroke(255);
+                    strokeWeight(1);
+                    textSize(20);
+                    text("test", x + 75, (round(i/5) * 212.5) + 220);
+                }
+            }
         },
         show: function () {
             for (var i = 0; i < this.level.platforms.length; i++) {
@@ -474,6 +489,7 @@ class Level {
         this.moveables = {};
         this.initX = 0;
         this.initY = 0;
+        this.name = "";
     }
 
     select() {
