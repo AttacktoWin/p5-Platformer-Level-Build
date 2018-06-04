@@ -94,6 +94,7 @@ function init() {
                 line(20, height - 35, 40, height - 50);
                 line(20, height - 35, 40, height - 20);
             }
+
             if (this.page < 3) {
                 fill(40, 40, 40, 150);
                 noStroke();
@@ -400,6 +401,7 @@ function init() {
                 }
                 if (mouseX > width - 85 && mouseX < width - 15) {
                     if (mouseY > height - 55 && mouseY < height - 15) {
+
                         if (this.page < 3) {
                             this.page++;
                         }
