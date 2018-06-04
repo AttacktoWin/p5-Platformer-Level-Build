@@ -4,7 +4,7 @@ function init() {
         state: "title",
         menu: false,
         level: new Level(),
-        userLevels: [],
+        userLevels: [[{name:"DEFAULT"}], [], [], []],
         page: 0,
         timer: 0,
         seconds: 0,
@@ -65,16 +65,25 @@ function init() {
         },
         displayLevels: function () {
             for (var i = 0; i < 25; i++) {
-                for (var x = 250; x < width - 250; x += 285) {
-                    noFill();
-                    stroke(ORANGE);
-                    strokeWeight(7);
-                    rect(x, (round(i / 5) * 212.5) + 50, 150, 150);
-                    stroke(255);
-                    strokeWeight(1);
-                    textSize(20);
-                    text("test" + (this.page + 1), x + 75, (round(i / 5) * 212.5) + 220);
-                }
+            //     for (var x = 250; x < width - 250; x += 285) {
+            //         noFill();
+            //         stroke(ORANGE);
+            //         strokeWeight(7);
+            //         rect(x, (round(i / 5) * 212.5) + 50, 150, 150);
+            //         stroke(255);
+            //         strokeWeight(1);
+            //         textSize(20);
+            //         if (typeof this.userLevels[this.page][i] == "object") {
+            //             text(this.userLevels[this.page][i].name, x + 75, (round(i / 5) * 212.5) + 220);
+            //         } else {
+            //             text("test" + (this.page + 1), x + 75, (round(i / 5) * 212.5) + 220);
+            //         }
+            //     }
+                // for (var y = 50; y < height - 50; y += 50) {
+                //     for (var x = 250; x < width - 250; x += 285) {
+                        
+                //     }
+                // }
             }
             fill(40, 40, 40, 150);
             noStroke();
@@ -325,7 +334,7 @@ function init() {
             if (mouseX > 480 && mouseX < 880) {
                 if (mouseY > 540 && mouseY < 690) {
                     if (this.state == "title") {
-                        // socket.emit('requestLevels');
+                        socket.emit('requestLevels');
                         this.state = "displayLevels";
                     }
                 }
@@ -387,7 +396,7 @@ function init() {
                         if (this.level.name == "" || this.level.name == null) {
                             this.level.name = "DefaultName";
                         }
-                        // socket.emit('uploadLevel', this.level);
+                        socket.emit('uploadLevel', this.level);
                     }
                 }
             }
