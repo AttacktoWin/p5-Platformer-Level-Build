@@ -94,7 +94,7 @@ function init() {
                 line(20, height - 35, 40, height - 50);
                 line(20, height - 35, 40, height - 20);
             }
-            if (this.page < 4) {
+            if (this.page < 3) {
                 fill(40, 40, 40, 150);
                 noStroke();
                 rect(width - 85, height - 55, 70, 40);
@@ -149,6 +149,15 @@ function init() {
                 triangle(600, 90, 640, 90, 620, 50);
                 triangle(640, 90, 680, 90, 660, 50);
                 triangle(680, 90, 720, 90, 700, 50);
+                rect(1100, 30, 200, 70);
+                fill(255);
+                textSize(30);
+                text("CLEAR", 1200, 75);
+                fill(BLUE);
+                rect(1400, 30, 200, 70);
+                fill(255);
+                textSize(30);
+                text("UPLOAD", 1500, 75);
             }
             noStroke();
             fill(this.level.col);
@@ -363,6 +372,24 @@ function init() {
                     }
                 }
             }
+            if (this.menu) {
+                if (mouseX > 1100 && mouseX < 1300) {
+                    if (mouseY > 30 && mouseY < 100) {
+                        this.level = new Level();
+                    }
+                }
+                if (mouseX > 1400 && mouseX < 1600) {
+                    if (mouseY > 30 && mouseY < 100) {
+                        if (this.level.name == "") {
+                            this.level.name = prompt("Enter a level name");
+                        }
+                        if (this.level.name == "" || this.level.name == null) {
+                            this.level.name = "DefaultName";
+                        }
+                        // socket.emit('uploadLevel', this.level);
+                    }
+                }
+            }
             if (this.state == "displayLevels") {
                 if (mouseX > 15 && mouseX < 85) {
                     if (mouseY > height - 55 && mouseY < height - 15) {
@@ -373,7 +400,7 @@ function init() {
                 }
                 if (mouseX > width - 85 && mouseX < width - 15) {
                     if (mouseY > height - 55 && mouseY < height - 15) {
-                        if (this.page < 4) {
+                        if (this.page < 3) {
                             this.page++;
                         }
                     }
