@@ -1,5 +1,7 @@
 "use strict";
 
+// let socket = io();
+
 let game, player;
 let debug = false;
 
@@ -15,6 +17,10 @@ function setup() {
 
     init();
 
+    // socket.on('sendLevels', function(levelsArray) {
+    //     game.userLevels = levelsArray;
+    // });
+
     $("body").append("<div id='instructions'></div>");
 }
 
@@ -29,6 +35,10 @@ function draw() {
         game.logic();
         game.display();
         $("#instructions").hide();
+    } else if (game.state == "title") {
+        game.title();
+    } else if (game.state == "displayLevels") {
+        game.displayLevels();
     }
     if (debug) {
         console.log(mouseX + "," + mouseY);

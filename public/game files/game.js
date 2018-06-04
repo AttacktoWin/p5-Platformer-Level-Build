@@ -1,9 +1,11 @@
 function init() {
     game = {
         pause: false,
-        state: "build",
+        state: "title",
         menu: false,
         level: new Level(),
+        userLevels: [],
+        page: 0,
         timer: 0,
         seconds: 0,
         minutes: 0,
@@ -40,6 +42,69 @@ function init() {
                 this.timer = "0" + this.timer;
             }
         },
+        title: function () {
+            $("#instructions").hide();
+            fill(255);
+            noStroke();
+            textSize(62);
+            textAlign(CENTER);
+            text("GOOD LUCK", width / 2, height / 4);
+            fill(GREY);
+            rect(0, height - 50, width, 50);
+            fill(ORANGE);
+            rect(0, height - 54, width, 4);
+            fill(BLUE);
+            rect(width / 2 - 15, height - 81, 30, 30);
+            fill(RED);
+            rect(480, 540, 400, 150);
+            fill(BLUE);
+            rect(1040, 540, 400, 150);
+            fill(255);
+            text("PLAY", 680, 635);
+            text("BUILD", 1240, 635);
+        },
+        displayLevels: function () {
+            for (var i = 0; i < 25; i++) {
+                for (var x = 250; x < width - 250; x += 285) {
+                    noFill();
+                    stroke(ORANGE);
+                    strokeWeight(7);
+                    rect(x, (round(i / 5) * 212.5) + 50, 150, 150);
+                    stroke(255);
+                    strokeWeight(1);
+                    textSize(20);
+                    text("test" + (this.page + 1), x + 75, (round(i / 5) * 212.5) + 220);
+                }
+            }
+            fill(40, 40, 40, 150);
+            noStroke();
+            rect(30, 15, 30 * 1.5, 30 * 1.5);
+            stroke(255, 255, 255, 150);
+            strokeWeight(5);
+            line(40, 37.5, 65, 37.5);
+            line(40, 37.5, 55, 27.5);
+            line(40, 37.5, 55, 47.5);
+            if (this.page > 0) {
+                fill(40, 40, 40, 150);
+                noStroke();
+                rect(15, height - 55, 70, 40);
+                stroke(255, 255, 255, 150);
+                strokeWeight(3);
+                line(20, height - 35, 75, height - 35);
+                line(20, height - 35, 40, height - 50);
+                line(20, height - 35, 40, height - 20);
+            }
+            if (this.page < 4) {
+                fill(40, 40, 40, 150);
+                noStroke();
+                rect(width - 85, height - 55, 70, 40);
+                stroke(255, 255, 255, 150);
+                strokeWeight(3);
+                line(width - 80, height - 35, width - 25, height - 35);
+                line(width - 25, height - 35, width - 40, height - 50);
+                line(width - 25, height - 35, width - 40, height - 20);
+            }
+        },
         show: function () {
             for (var i = 0; i < this.level.platforms.length; i++) {
                 this.level.platforms[i].show();
@@ -57,6 +122,9 @@ function init() {
             }
             rect(width - (30 * 4), 30 * 0.5, 30 * 1.5, 30 * 1.5);
             rect(width - 30 * 2, 30 * 0.5, 30 * 1.5, 30 * 1.5);
+            if (!this.menu) {
+                rect(30, 15, 30 * 1.5, 30 * 1.5);
+            }
             noFill();
             stroke(255, 255, 255, 150);
             strokeWeight(3);
@@ -66,6 +134,9 @@ function init() {
                 line(width - 30 * 1.75, 30 * 0.9, width - 30 * 0.8, 30 * 0.9);
                 line(width - 30 * 1.75, 30 * 1.2, width - 30 * 0.8, 30 * 1.2);
                 line(width - 30 * 1.75, 30 * 1.5, width - 30 * 0.8, 30 * 1.5);
+                line(40, 37.5, 65, 37.5);
+                line(40, 37.5, 55, 27.5);
+                line(40, 37.5, 55, 47.5);
             } else {
                 line(width - 30 * 1.75, 30 * 0.9, width - 30 * 0.8, 30 * 1.5);
                 line(width - 30 * 1.75, 30 * 1.5, width - 30 * 0.8, 30 * 0.9);
@@ -93,7 +164,7 @@ function init() {
                     } else if (this.level.selected.type == "spikes") {
                         if (keyIsDown(RIGHT_ARROW)) {
                             this.level.spikes[this.level.selected.index].r = 2;
-                        } else if (this.level.spikes[this.level.selected.index].r == 1 ||this.level.spikes[this.level.selected.index].r == 3) {
+                        } else if (this.level.spikes[this.level.selected.index].r == 1 || this.level.spikes[this.level.selected.index].r == 3) {
                             this.level.spikes[this.level.selected.index].w++;
                         }
                     }
@@ -104,7 +175,7 @@ function init() {
                     } else if (this.level.selected.type == "spikes") {
                         if (keyIsDown(LEFT_ARROW)) {
                             this.level.spikes[this.level.selected.index].r = 4;
-                        } else if (this.level.spikes[this.level.selected.index].r == 1 ||this.level.spikes[this.level.selected.index].r == 3) {
+                        } else if (this.level.spikes[this.level.selected.index].r == 1 || this.level.spikes[this.level.selected.index].r == 3) {
                             this.level.spikes[this.level.selected.index].w--;
                         }
                     }
@@ -115,7 +186,7 @@ function init() {
                     } else if (this.level.selected.type == "spikes") {
                         if (keyIsDown(UP_ARROW)) {
                             this.level.spikes[this.level.selected.index].r = 1;
-                        } else if (this.level.spikes[this.level.selected.index].r == 2 ||this.level.spikes[this.level.selected.index].r == 4) {
+                        } else if (this.level.spikes[this.level.selected.index].r == 2 || this.level.spikes[this.level.selected.index].r == 4) {
                             this.level.spikes[this.level.selected.index].w--;
                         }
                     }
@@ -126,7 +197,7 @@ function init() {
                     } else if (this.level.selected.type == "spikes") {
                         if (keyIsDown(DOWN_ARROW)) {
                             this.level.spikes[this.level.selected.index].r = 3;
-                        } else if (this.level.spikes[this.level.selected.index].r == 2 ||this.level.spikes[this.level.selected.index].r == 4) {
+                        } else if (this.level.spikes[this.level.selected.index].r == 2 || this.level.spikes[this.level.selected.index].r == 4) {
                             this.level.spikes[this.level.selected.index].w++;
                         }
                     }
@@ -241,6 +312,22 @@ function init() {
             player.show();
         },
         changeMode() {
+            if (mouseX > 480 && mouseX < 880) {
+                if (mouseY > 540 && mouseY < 690) {
+                    if (this.state == "title") {
+                        // socket.emit('requestLevels');
+                        this.state = "displayLevels";
+                    }
+                }
+            }
+            if (mouseX > 1040 && mouseX < 1440) {
+                if (mouseY > 540 && mouseY < 690) {
+                    if (this.state == "title") {
+                        this.state = "build";
+                        $("#instructions").show();
+                    }
+                }
+            }
             if (mouseX > width - 120 && mouseX < width - 75) {
                 if (mouseY > 15 && mouseY < 60) {
                     if (this.state == "build") {
@@ -266,6 +353,29 @@ function init() {
                         this.menu = false;
                     } else {
                         this.menu = true;
+                    }
+                }
+            }
+            if (mouseX > 30 && mouseX < 75) {
+                if (mouseY > 15 && mouseY < 60) {
+                    if (this.state == "build" && !this.menu || this.state == "displayLevels") {
+                        this.state = "title";
+                    }
+                }
+            }
+            if (this.state == "displayLevels") {
+                if (mouseX > 15 && mouseX < 85) {
+                    if (mouseY > height - 55 && mouseY < height - 15) {
+                        if (this.page > 0) {
+                            this.page--;
+                        }
+                    }
+                }
+                if (mouseX > width - 85 && mouseX < width - 15) {
+                    if (mouseY > height - 55 && mouseY < height - 15) {
+                        if (this.page < 4) {
+                            this.page++;
+                        }
                     }
                 }
             }
@@ -351,7 +461,7 @@ class Player {
         for (var i = 0; i < game.level.spikes.length; i++) {
             if (game.level.spikes[i].r == 1) {
                 if (this.x + this.w > game.level.spikes[i].x && this.x < game.level.spikes[i].x + game.level.spikes[i].w * 40) {
-                    if (this.y + this.h > game.level.spikes[i].y - 41 && this.y < game.level.spikes[i].y) {
+                    if (this.y + this.h > game.level.spikes[i].y && this.y < game.level.spikes[i].y + 40) {
                         this.deaths++;
                         game.seconds = parseInt(game.seconds);
                         game.seconds += 10;
@@ -391,6 +501,9 @@ class Player {
         if (this.x > width) {
             game.changeMode();
         }
+        if (this.x < 0) {
+            this.x = 0;
+        }
     }
 
     show() {
@@ -420,6 +533,7 @@ class Level {
         this.moveables = {};
         this.initX = 0;
         this.initY = 0;
+        this.name = "";
     }
 
     select() {
