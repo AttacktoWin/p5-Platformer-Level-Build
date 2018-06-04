@@ -63,18 +63,46 @@ function init() {
             text("PLAY", 680, 635);
             text("BUILD", 1240, 635);
         },
-        displayLevels: function() {
+        displayLevels: function () {
             for (var i = 0; i < 25; i++) {
                 for (var x = 250; x < width - 250; x += 285) {
                     noFill();
                     stroke(ORANGE);
                     strokeWeight(7);
-                    rect(x, (round(i/5) * 212.5) + 50, 150, 150);
+                    rect(x, (round(i / 5) * 212.5) + 50, 150, 150);
                     stroke(255);
                     strokeWeight(1);
                     textSize(20);
-                    text("test", x + 75, (round(i/5) * 212.5) + 220);
+                    text("test" + (this.page + 1), x + 75, (round(i / 5) * 212.5) + 220);
                 }
+            }
+            fill(40, 40, 40, 150);
+            noStroke();
+            rect(30, 15, 30 * 1.5, 30 * 1.5);
+            stroke(255, 255, 255, 150);
+            strokeWeight(5);
+            line(40, 37.5, 65, 37.5);
+            line(40, 37.5, 55, 27.5);
+            line(40, 37.5, 55, 47.5);
+            if (this.page > 0) {
+                fill(40, 40, 40, 150);
+                noStroke();
+                rect(15, height - 55, 70, 40);
+                stroke(255, 255, 255, 150);
+                strokeWeight(3);
+                line(20, height - 35, 75, height - 35);
+                line(20, height - 35, 40, height - 50);
+                line(20, height - 35, 40, height - 20);
+            }
+            if (this.page < 4) {
+                fill(40, 40, 40, 150);
+                noStroke();
+                rect(width - 85, height - 55, 70, 40);
+                stroke(255, 255, 255, 150);
+                strokeWeight(3);
+                line(width - 80, height - 35, width - 25, height - 35);
+                line(width - 25, height - 35, width - 40, height - 50);
+                line(width - 25, height - 35, width - 40, height - 20);
             }
         },
         show: function () {
@@ -108,7 +136,7 @@ function init() {
                 line(width - 30 * 1.75, 30 * 1.5, width - 30 * 0.8, 30 * 1.5);
                 line(40, 37.5, 65, 37.5);
                 line(40, 37.5, 55, 27.5);
-                line(40, 37.5, 55, 47.5)
+                line(40, 37.5, 55, 47.5);
             } else {
                 line(width - 30 * 1.75, 30 * 0.9, width - 30 * 0.8, 30 * 1.5);
                 line(width - 30 * 1.75, 30 * 1.5, width - 30 * 0.8, 30 * 0.9);
@@ -330,8 +358,24 @@ function init() {
             }
             if (mouseX > 30 && mouseX < 75) {
                 if (mouseY > 15 && mouseY < 60) {
-                    if (this.state == "build" && !this.menu) {
+                    if (this.state == "build" && !this.menu || this.state == "displayLevels") {
                         this.state = "title";
+                    }
+                }
+            }
+            if (this.state == "displayLevels") {
+                if (mouseX > 15 && mouseX < 85) {
+                    if (mouseY > height - 55 && mouseY < height - 15) {
+                        if (this.page > 0) {
+                            this.page--;
+                        }
+                    }
+                }
+                if (mouseX > width - 85 && mouseX < width - 15) {
+                    if (mouseY > height - 55 && mouseY < height - 15) {
+                        if (this.page < 4) {
+                            this.page++;
+                        }
                     }
                 }
             }
