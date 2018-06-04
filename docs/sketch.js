@@ -1,6 +1,6 @@
 "use strict";
 
-// let socket = io();
+let socket = io();
 
 let game, player;
 let debug = false;
