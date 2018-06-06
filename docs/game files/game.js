@@ -4,7 +4,18 @@ function init() {
         state: "title",
         menu: false,
         level: new Level(),
-        userLevels: [],
+        userLevels: [
+            [{
+                platforms: [new Platform(0, height - 50, width, 50, 0, 0, 0, 0)],
+                spikes: [],
+                spawnX: 50,
+                spawnY: 200,
+                name: "DEFAULT"
+            }],
+            [],
+            [],
+            []
+        ],
         page: 0,
         timer: 0,
         seconds: 0,
@@ -65,15 +76,24 @@ function init() {
         },
         displayLevels: function () {
             for (var i = 0; i < 25; i++) {
-                for (var x = 250; x < width - 250; x += 285) {
-                    noFill();
-                    stroke(ORANGE);
-                    strokeWeight(7);
-                    rect(x, (round(i / 5) * 212.5) + 50, 150, 150);
-                    stroke(255);
-                    strokeWeight(1);
-                    textSize(20);
-                    text("test" + (this.page + 1), x + 75, (round(i / 5) * 212.5) + 220);
+                noFill();
+                stroke(ORANGE);
+                strokeWeight(7);
+                rect((i % 5) * 285 + 275, floor(i / 5) * 212.5 + 50, 150, 150);
+                stroke(255);
+                strokeWeight(1);
+                textSize(20);
+                if (typeof this.userLevels[this.page][i] == "object") {
+                    text(this.userLevels[this.page][i].name, (i % 5) * 285 + 350, floor(i / 5) * 212.5 + 225);
+                    fill(GREY);
+                    noStroke();
+                    rect((i % 5) * 285 + 277, floor(i / 5) * 212.5 + 175, 144, 25);
+                    fill(ORANGE);
+                    rect((i % 5) * 285 + 277, floor(i / 5) * 212.5 + 173, 144, 2);
+                    fill(BLUE);
+                    rect((i % 5) * 285 + 335, floor(i / 5) * 212.5 + 152, 20, 20);
+                } else {
+                    text("EMPTY", (i % 5) * 285 + 350, floor(i / 5) * 212.5 + 225);
                 }
             }
             fill(40, 40, 40, 150);
@@ -325,7 +345,7 @@ function init() {
             if (mouseX > 480 && mouseX < 880) {
                 if (mouseY > 540 && mouseY < 690) {
                     if (this.state == "title") {
-                        // socket.emit('requestLevels');
+                        socket.emit('requestLevels');
                         this.state = "displayLevels";
                     }
                 }
@@ -387,7 +407,7 @@ function init() {
                         if (this.level.name == "" || this.level.name == null) {
                             this.level.name = "DefaultName";
                         }
-                        // socket.emit('uploadLevel', this.level);
+                        socket.emit('uploadLevel', this.level);
                     }
                 }
             }
@@ -404,6 +424,16 @@ function init() {
 
                         if (this.page < 3) {
                             this.page++;
+                        }
+                    }
+                }
+                for (var i = 0; i < 25; i++) {
+                    if (mouseX > (i % 5) * 285 + 275 && mouseX < (i % 5) * 285 + 425) {
+                        if (mouseY > floor(i / 5) * 212.5 + 50 && mouseY < floor(i / 5) * 212.5 + 200) {
+                            if (typeof this.userLevels[this.page][i] == "object") {
+                                this.level = new Level(this.userLevels[this.page][i]);
+                                this.state = "build";
+                            }
                         }
                     }
                 }
@@ -550,19 +580,34 @@ class Player {
 }
 
 class Level {
-    constructor() {
-        this.platforms = [new Platform(0, height - 50, width, height, 0, 0, 0, 0)];
-        this.spikes = [];
-        this.spawnX = 0;
-        this.spawnY = height - 80;
-        this.playerStroke = 0;
-        this.col = BLUE;
-        this.selected = {};
-        this.prevSelected = {};
-        this.moveables = {};
-        this.initX = 0;
-        this.initY = 0;
-        this.name = "";
+    constructor(loaded) {
+        if (loaded != null) {
+            this.platforms = loaded.platforms;
+            this.spikes = loaded.spikes;
+            this.spawnX = loaded.spawnX;
+            this.spawnY = loaded.spawnY;
+            this.playerStroke = 0;
+            this.col = BLUE;
+            this.selected = {};
+            this.prevSelected = {};
+            this.moveables = {};
+            this.initX = 0;
+            this.initY = 0;
+            this.name = loaded.name;
+        } else {
+            this.platforms = [new Platform(0, height - 50, width, height, 0, 0, 0, 0)];
+            this.spikes = [];
+            this.spawnX = 0;
+            this.spawnY = height - 80;
+            this.playerStroke = 0;
+            this.col = BLUE;
+            this.selected = {};
+            this.prevSelected = {};
+            this.moveables = {};
+            this.initX = 0;
+            this.initY = 0;
+            this.name = "";
+        }
     }
 
     select() {

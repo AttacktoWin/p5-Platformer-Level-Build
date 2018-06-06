@@ -1,6 +1,6 @@
 "use strict";
 
-// let socket = io();
+let socket = io();
 
 let game, player;
 let debug = false;
@@ -17,9 +17,9 @@ function setup() {
 
     init();
 
-    // socket.on('sendLevels', function(levelsArray) {
-    //     game.userLevels = levelsArray;
-    // });
+    socket.on('sendLevels', function(levelsArray) {
+        game.userLevels = levelsArray;
+    });
 
     $("body").append("<div id='instructions'></div>");
 }

@@ -1,12 +1,13 @@
-var app = require('express')();
+var express = require('express');
+var app = express();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 
 var levelsArray = [[], [], [], []];
 
-app.get('/', function(req, res) {
-    res.sendFile(__dirname + '/docs/index.html');
-});
+// app.get('/docs', function(req, res) {
+//     res.sendFile(__dirname + '/docs/index.html');
+// });
 
 io.on('connection', function(socket) {
     console.log('a user connected');
@@ -41,3 +42,5 @@ io.on('connection', function(socket) {
 http.listen(3000, function() {
     console.log('listening on *:3000');
 });
+
+app.use(express.static('docs'));
